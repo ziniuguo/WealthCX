@@ -1,0 +1,41 @@
+{
+    "logs": {
+        "level": "debug",
+        "transports": {
+            "console": {
+                "enabled": false
+            },
+            "file": {
+                "enabled": false,
+                "name": "refinitiv-data-lib.log"
+            }
+        }
+    },
+    "sessions": {
+        "default": "platform.rdp",
+        "platform": {
+            "rdp": {
+                "app-key": "9128570cd99d4f8885000b6d9fb8581df006af8d",
+                "username": "john.gallagherAPI@wealthcx.com",
+                "password": "Reuters1!"
+            },
+            "deployed": {
+                "app-key": "9128570cd99d4f8885000b6d9fb8581df006af8d",
+                "realtime-distribution-system": {
+                    "url" : "YOUR DEPLOYED HOST:PORT GOES HERE!",
+                    "dacs" : {
+                        "username" : "YOUR DACS ID GOES HERE!",
+                        "application-id" : 256,
+                        "position" : ""
+                    }
+                }
+            }
+        },
+        "desktop": {
+            "workspace": {
+                "app-key": "9128570cd99d4f8885000b6d9fb8581df006af8d"
+            }
+        }
+        
+    }
+}

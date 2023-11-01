@@ -1,0 +1,13 @@
+{
+    "sessions": {
+        "default": "platform.my-custom-session",
+        "platform": {
+            "my-custom-session": {
+                "app-key": "9128570cd99d4f8885000b6d9fb8581df006af8d",
+                "username": "john.gallagherAPI@wealthcx.com",
+                "password": "Reuters1!",
+                "signon_control":true
+            }
+        }
+    }
+}
