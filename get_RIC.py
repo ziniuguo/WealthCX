@@ -1,5 +1,6 @@
 import mysql.connector
 
+
 def get_ric():
     # Define MySQL connection parameters
     config = {
@@ -34,4 +35,6 @@ def get_ric():
     cursor.close()
     conn.close()
     return results
+
+
 get_ric()
