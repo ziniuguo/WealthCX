@@ -7,7 +7,7 @@ import csv
 from datetime import datetime, timedelta
 
 
-def populate(ric):
+def populate(uuid, ric):
     pd.set_option('display.max_columns', None)
     os.environ["RD_LIB_CONFIG_PATH"] = "./Configuration"
     rd.open_session()
@@ -29,7 +29,7 @@ def populate(ric):
         else:
             today = today - timedelta(days=1)
 
-    b.to_csv('refinitiv.csv', index=True)  # index=False 用于不保存行索引
+    b.to_csv(uuid + '-refinitiv.csv', index=True)  # index=False 用于不保存行索引
 
     rd.close_session()
 
@@ -41,12 +41,9 @@ def populate(ric):
         "database": "wealthcx",
     }
 
-    # Establish a MySQL connection and create a cursor
-
     conn = mysql.connector.connect(**config)
     cursor = conn.cursor()
 
-    # SQL commands
     drop = """DROP TABLE IF EXISTS refinitiv"""
     cursor.execute(drop)
     conn.commit()
@@ -79,7 +76,7 @@ def populate(ric):
 
     # Read the CSV file and insert data row by row
     i = 0
-    with open('refinitiv.csv', 'r', newline='', encoding='utf-8') as csvfile:
+    with open(uuid + '-refinitiv.csv', 'r', newline='', encoding='utf-8') as csvfile:
         csvreader = csv.reader(csvfile)
         next(csvreader)  # Skip the header row
         for row in csvreader:
