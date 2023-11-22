@@ -1,8 +1,8 @@
-from typing import Union
+import uuid
 
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
-import uuid
+
 import automation
 
 app = FastAPI()
@@ -13,7 +13,7 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/{item_id}")
+@app.get("/query/{item_id}")
 def read_item(item_id: str):
     i = str(uuid.uuid1())
     automation.automate(uuid=i, ric_value=item_id)
