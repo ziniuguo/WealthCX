@@ -1,3 +1,4 @@
+import os
 import uuid
 
 from fastapi import FastAPI
@@ -6,6 +7,17 @@ from fastapi.responses import FileResponse
 import automation
 
 app = FastAPI()
+
+
+class FileResponseDeleteAfter(FileResponse):
+    def __init__(self, path: str, *args, **kwargs):
+        super().__init__(path, *args, **kwargs)
+        self.file_path = path
+
+    async def __call__(self, scope, receive, send):
+        await super().__call__(scope, receive, send)
+        if os.path.exists(self.file_path):
+            os.remove(self.file_path)
 
 
 @app.get("/")
@@ -18,6 +30,6 @@ def read_item(item_id: str):
     i = str(uuid.uuid1())
     automation.automate(uuid=i, ric_value=item_id)
     file_path = i + "-output.csv"
-    return FileResponse(path=file_path,
-                        filename="result.csv",
-                        media_type='text/csv')
+    return FileResponseDeleteAfter(path=file_path,
+                                   filename="result.csv",
+                                   media_type='text/csv')

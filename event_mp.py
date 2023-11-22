@@ -1,7 +1,7 @@
 import csv
-import requests
-import pandas as pd
+
 import mysql.connector
+import requests
 
 url = "https://dataapi.marketpsych.com/pulse/v4/events/equ/hou/"
 asset_code = "all"
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS event_mp (
     _id VARCHAR(255) PRIMARY KEY,
     Date DATETIME,
     assetClass VARCHAR(255),
-    assetCode VARCHAR(255),
+    assetCode BIGINT,
     Headline VARCHAR(255),
     Topic VARCHAR(255),
     Sentiment VARCHAR(255),

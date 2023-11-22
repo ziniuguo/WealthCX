@@ -1,9 +1,12 @@
+import csv
+
 import mysql.connector
 import pandas as pd
 
 import refinitiv_price
 import hawkeye_signal
 import json
+
 
 def automate(uuid, ric_value="AAPL.O"):
     config = {
@@ -25,15 +28,16 @@ def automate(uuid, ric_value="AAPL.O"):
     asset_code = cursor.fetchone()
     asset_code = asset_code[0]
 
-    # Join refinitiv, event (both only latest) and asset
+    # Join event and asset
     sql_query = f"""
     SELECT * FROM asset_mp_refined 
     INNER JOIN event_mp ON event_mp.assetCode = '{asset_code}' AND asset_mp_refined.assetCode = '{asset_code}' AND Sentiment != '' 
-    INNER JOIN refinitiv
     ORDER BY event_mp.Date DESC LIMIT 1
     """
 
     df = pd.read_sql(sql_query, conn)
+
+    conn.close()
 
     df = df.drop(columns=['Idx'], errors='ignore')
 
@@ -42,8 +46,6 @@ def automate(uuid, ric_value="AAPL.O"):
         cols[df.columns.get_loc(dup)] = [f'{dup}_{i}' if i != 0 else dup for i in range(df.columns.get_loc(dup).sum())]
     df.columns = cols
     df = df.drop(columns=['assetCode_1'], errors='ignore')
-
-    csv_file = uuid + "-output.csv"
 
     original_table = df  # replace 'original_table_data' with your actual data variable
 
@@ -86,7 +88,35 @@ def automate(uuid, ric_value="AAPL.O"):
     merged_table = pd.concat([original_table, json_df], axis=1)
 
     # Now export the merged table to a CSV file.
-    merged_table.to_csv(csv_file, index=False)
+    merged_table.to_csv(uuid + "-temp.csv", index=False)
 
-    conn.close()
+    # Paths to your CSV files
+    csv_file1 = uuid + "-temp.csv"
+    csv_file2 = uuid + "-refinitiv.csv"
+    output_csv = uuid + "-output.csv"
+
+    # Read the header and the first data line from each CSV file
+    with open(csv_file1, 'r') as file1, open(csv_file2, 'r') as file2:
+        reader1 = csv.reader(file1)
+        reader2 = csv.reader(file2)
+
+        header1 = next(reader1, None)  # Read header from the first file
+        header2 = next(reader2, None)  # Read header from the second file
+
+        line1 = next(reader1, None)  # Read first data line from the first file
+        line2 = next(reader2, None)  # Read first data line from the second file
+
+    # Combine the headers and the data lines
+    combined_header = header1 + header2 if header1 and header2 else None
+    combined_line = line1 + line2 if line1 and line2 else None
+
+    # Write the combined header and data line to a new CSV file
+    if combined_header and combined_line:
+        with open(output_csv, 'w', newline='') as outfile:
+            writer = csv.writer(outfile)
+            writer.writerow(combined_header)
+            writer.writerow(combined_line)
+        print(f"Combined CSV with header written to {output_csv}")
+    else:
+        print("One of the files is empty, missing, or does not contain data beyond the header.")
 
