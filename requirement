@@ -1,0 +1,5 @@
+refinitiv-data
+uvicorn
+mysql-connector-python
+langchain
+fastapi
