@@ -10,10 +10,10 @@ import json
 
 def automate(uuid, ric_value="AAPL.O"):
     config = {
-        "user": "doadmin",
-        "password": "AVNS_tO45HWZ7rqlgDO7DoU-",
-        "host": "db-mysql-sgp1-25924-do-user-14729808-0.b.db.ondigitalocean.com",
-        "port": 25060,
+        "user": "root",
+        "password": "abc123",
+        "host": "localhost",
+        "port": 3306,
         "database": "wealthcx",
     }
 

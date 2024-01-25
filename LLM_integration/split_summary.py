@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+from langchain.embeddings import OpenAIEmbeddings
 from langchain.llms import OpenAI
 import os
 
@@ -16,15 +18,15 @@ os.environ["OPENAI_API_KEY"] = ""
 from langchain.prompts import PromptTemplate
 
 def split_summary(news):
+    # OpenAIEmbeddings(model="gpt-3.5-turbo-instruct")
     prompt_template = PromptTemplate(
         input_variables=["news"],
-        template="please split the the following news into several bullet points: {news}",
+        template="please split the the following news into several bullet points: {news}. Besides, please indicate each bullet point by '-'.",
     )
     prompt = prompt_template.format(news = docs[0])
 
-    llm = OpenAI(temperature = 0.9)
+    # llm = OpenAI(temperature = 0.9)
+    llm = OpenAI(model_name="gpt-3.5-turbo-instruct")
     return llm(prompt)
-
-
 
 
