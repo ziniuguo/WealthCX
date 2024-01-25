@@ -1,7 +1,7 @@
 import csv
-import requests
-import pandas as pd
+
 import mysql.connector
+import requests
 
 url = "https://dataapi.marketpsych.com/pulse/v4/events/equ/hou/"
 asset_code = "all"
@@ -20,12 +20,12 @@ else:
 
 # Define MySQL connection parameters
 config = {
-    "user": "doadmin",
-    "password": "AVNS_tO45HWZ7rqlgDO7DoU-",
-    "host": "db-mysql-sgp1-25924-do-user-14729808-0.b.db.ondigitalocean.com",
-    "port": 25060,
-    "database": "wealthcx",
-}
+        "user": "root",
+        "password": "abc123",
+        "host": "localhost",
+        "port": 3306,
+        "database": "wealthcx",
+    }
 
 
 # Establish a MySQL connection and create a cursor
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS event_mp (
     _id VARCHAR(255) PRIMARY KEY,
     Date DATETIME,
     assetClass VARCHAR(255),
-    assetCode VARCHAR(255),
+    assetCode BIGINT,
     Headline VARCHAR(255),
     Topic VARCHAR(255),
     Sentiment VARCHAR(255),

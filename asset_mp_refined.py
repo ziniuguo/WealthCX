@@ -1,12 +1,12 @@
 import mysql.connector
 
 config = {
-    "user": "doadmin",
-    "password": "AVNS_tO45HWZ7rqlgDO7DoU-",
-    "host": "db-mysql-sgp1-25924-do-user-14729808-0.b.db.ondigitalocean.com",
-    "port": 25060,
-    "database": "wealthcx",
-}
+        "user": "root",
+        "password": "abc123",
+        "host": "localhost",
+        "port": 3306,
+        "database": "wealthcx",
+    }
 
 conn = mysql.connector.connect(**config)
 cursor = conn.cursor()

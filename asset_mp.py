@@ -19,12 +19,12 @@ else:
 
 # Define MySQL connection parameters
 config = {
-    "user": "doadmin",
-    "password": "AVNS_tO45HWZ7rqlgDO7DoU-",
-    "host": "db-mysql-sgp1-25924-do-user-14729808-0.b.db.ondigitalocean.com",
-    "port": 25060,
-    "database": "wealthcx",
-}
+        "user": "root",
+        "password": "abc123",
+        "host": "localhost",
+        "port": 3306,
+        "database": "wealthcx",
+    }
 
 # Establish a MySQL connection and create a cursor
 
@@ -39,18 +39,13 @@ CREATE TABLE IF NOT EXISTS asset_mp (
     assetCode BIGINT PRIMARY KEY,
     name VARCHAR(255),
     RIC VARCHAR(255),
-    version VARCHAR(255),
     filedate DATE,
-    PermID BIGINT,
     TRBC BIGINT,
-    TRBC_PermID BIGINT,
     TRBCEconomicSector VARCHAR(255),
     Ticker VARCHAR(255),
     MIC VARCHAR(255),
     Domicile VARCHAR(255),
     ExchangeCountry VARCHAR(255),
-    ExchangeCode BIGINT,
-    InfoCode BIGINT,
     Region VARCHAR(255),
     status VARCHAR(255)
 )
@@ -66,12 +61,13 @@ with open('asset.csv', 'r', newline='', encoding='utf-8') as csvfile:
     csvreader = csv.reader(csvfile)
     next(csvreader)  # Skip the header row
     for row in csvreader:
+        # Replace empty strings with None (NULL)
+        row = [None if x == '' else x for x in row]
         cursor.execute("""
-                INSERT INTO asset_mp
-                (assetCode, name, RIC, version, filedate, PermID, TRBC, TRBC_PermID, TRBCEconomicSector, 
-                Ticker, MIC, Domicile, ExchangeCountry, ExchangeCode, InfoCode, Region, status)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """, row)
+            INSERT INTO asset_mp
+            (assetCode, name, RIC, filedate, TRBC, TRBCEconomicSector, Ticker, MIC, Domicile, ExchangeCountry, Region, status)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """, row)
 
 # Commit the changes to the database
 
