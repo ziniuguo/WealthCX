@@ -14,7 +14,7 @@ docs = ["At Apple's September event, the company unveiled the iPhone 15, which w
         "use of clean electricity and recycled materials."]
 #
 
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = ""
 from langchain.prompts import PromptTemplate
 
 def split_summary(news):
