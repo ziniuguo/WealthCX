@@ -1,12 +1,10 @@
+import json
+
 import mysql.connector
 
-config = {
-        "user": "root",
-        "password": "abc123",
-        "host": "localhost",
-        "port": 3306,
-        "database": "wealthcx",
-    }
+# Define MySQL connection parameters
+with open('./Configuration/database.config.json', 'r') as config_file:
+    config = json.load(config_file)
 
 conn = mysql.connector.connect(**config)
 cursor = conn.cursor()

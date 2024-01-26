@@ -1,21 +1,22 @@
 import csv
+import os
 
 import mysql.connector
 import pandas as pd
 
 import refinitiv_price
-import hawkeye_signal
 import json
 
+def check_file_existence(file_path):
+    if not os.path.exists(file_path):
+        print(f"Error: File not found at {file_path}")
+        return False
+    return True
 
-def automate(uuid, ric_value="AAPL.O"):
-    config = {
-        "user": "root",
-        "password": "abc123",
-        "host": "localhost",
-        "port": 3306,
-        "database": "wealthcx",
-    }
+def automate(uuid, ric_value="JPM"):
+    # Define MySQL connection parameters
+    with open('./Configuration/database.config.json', 'r') as config_file:
+        config = json.load(config_file)
 
     conn = mysql.connector.connect(**config)
     cursor = conn.cursor()
@@ -49,34 +50,29 @@ def automate(uuid, ric_value="AAPL.O"):
 
     original_table = df  # replace 'original_table_data' with your actual data variable
 
-    with open('hawkeye.json', 'r') as json_file:
-        # 使用json.load()方法加载JSON文件内容
-        json_data_with_single_quotes = json_file.read()
+    # 使用open函数和json.load方法读取和解析JSON文件
+    with open('./Output/HawkeyeData.json', 'r') as json_file:
+        json_data = json.load(json_file)
 
-    # 将单引号替换为双引号
-    json_data_with_double_quotes = json_data_with_single_quotes.replace("'", "\"")
-
-    # 解析转换后的JSON数据
-    json_data = json.loads(json_data_with_double_quotes)
-
-    # json_data = hawkeye_signal.get_hawkeye_data()
+    # 根据JSON文件的结构提取数据
+    # 这里的代码可能需要根据您的实际JSON文件结构进行调整
     # Extract the relevant data from the JSON.
     json_extracted_data = {
-        "ticker_currency": json_data['AAPL.O']['ticker_currency'],
-        "algo_short_description": json_data['AAPL.O']['algo_short_description'],
-        "number_events": json_data['AAPL.O']['number_events'],
-        "event_period_units": json_data['AAPL.O']['event_period_units'],
-        "outlook_period": json_data['AAPL.O']['outlook_period'],
-        "outlook_period_length": json_data['AAPL.O']['outlook_period_length'],
-        "event_signal_date": json_data['AAPL.O']['event_signal_date'],
-        "ticker_last_close_price": json_data['AAPL.O']['ticker_last_close_price'],
-        "optimal_period": json_data['AAPL.O']['optimal_period'],
-        "data_analyzed_from": json_data['AAPL.O']['data_analyzed_from'],
-        "expected_average_return": json_data['AAPL.O']['expected_average_return'],
-        "expected_win_rate": json_data['AAPL.O']['expected_win_rate'],
+        "ticker_currency": json_data[ric_value]['ticker_currency'],
+        "algo_short_description": json_data[ric_value]['algo_short_description'],
+        "number_events": json_data[ric_value]['number_events'],
+        "event_period_units": json_data[ric_value]['event_period_units'],
+        "outlook_period": json_data[ric_value]['outlook_period'],
+        "outlook_period_length": json_data[ric_value]['outlook_period_length'],
+        "event_signal_date": json_data[ric_value]['event_signal_date'],
+        "ticker_last_close_price": json_data[ric_value]['ticker_last_close_price'],
+        "optimal_period": json_data[ric_value]['optimal_period'],
+        "data_analyzed_from": json_data[ric_value]['data_analyzed_from'],
+        "expected_average_return": json_data[ric_value]['expected_average_return'],
+        "expected_win_rate": json_data[ric_value]['expected_win_rate'],
         # Assuming event_abs_instances is a list of dictionaries
-        "event_abs_instances": [instance['trade_returns'] for instance in json_data['AAPL.O']['event_abs_instances']],
-        "event_abs_stats": json_data['AAPL.O']['event_abs_stats']
+        "event_abs_instances": [instance['trade_returns'] for instance in json_data[ric_value]['event_abs_instances']],
+        "event_abs_stats": json_data[ric_value]['event_abs_stats']
     }
 
     # Create a DataFrame from the extracted JSON data.
@@ -88,12 +84,13 @@ def automate(uuid, ric_value="AAPL.O"):
     merged_table = pd.concat([original_table, json_df], axis=1)
 
     # Now export the merged table to a CSV file.
-    merged_table.to_csv(uuid + "-temp.csv", index=False)
+    temp_csv_path = f'./Output/{uuid}-temp.csv'
+    merged_table.to_csv(temp_csv_path, index=False)
 
-    # Paths to your CSV files
-    csv_file1 = uuid + "-temp.csv"
-    csv_file2 = uuid + "-refinitiv.csv"
-    output_csv = uuid + "-output.csv"
+    # 读取和合并CSV文件的路径也应该更新
+    csv_file1 = temp_csv_path
+    csv_file2 = f'./Output/{uuid}-refinitiv.csv'
+    output_csv = f'./Output/{uuid}-output.csv'
 
     # Read the header and the first data line from each CSV file
     with open(csv_file1, 'r') as file1, open(csv_file2, 'r') as file2:

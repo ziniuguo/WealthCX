@@ -1,6 +1,5 @@
 import os
 from datetime import datetime, timedelta
-
 import pandas as pd
 import refinitiv.data as rd
 
@@ -20,7 +19,7 @@ def populate(uuid, ric):
         a = rd.get_history(universe=ric, start=yesterday, end=today)
         b = pd.DataFrame(a)
         if len(b) != 0:
-            b.to_csv(uuid + '-refinitiv.csv', index=True)
+            b.to_csv(f'./Output/{uuid}-refinitiv.csv', index=True)
             break
         else:
             today = today - timedelta(days=1)

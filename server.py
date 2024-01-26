@@ -29,7 +29,7 @@ def read_root():
 def read_item(item_id: str):
     i = str(uuid.uuid1())
     automation.automate(uuid=i, ric_value=item_id)
-    file_path = i + "-output.csv"
+    file_path = "./Output/"+ i + "-output.csv"
     return FileResponseDeleteAfter(path=file_path,
                                    filename="result.csv",
                                    media_type='text/csv')

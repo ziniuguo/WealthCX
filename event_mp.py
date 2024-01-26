@@ -1,4 +1,5 @@
 import csv
+import json
 
 import mysql.connector
 import requests
@@ -19,13 +20,8 @@ else:
     print("Failed to download CSV file. Status code:", response.status_code)
 
 # Define MySQL connection parameters
-config = {
-        "user": "root",
-        "password": "abc123",
-        "host": "localhost",
-        "port": 3306,
-        "database": "wealthcx",
-    }
+with open('./Configuration/database.config.json', 'r') as config_file:
+    config = json.load(config_file)
 
 
 # Establish a MySQL connection and create a cursor
