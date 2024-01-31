@@ -13,7 +13,7 @@ def check_file_existence(file_path):
         return False
     return True
 
-def automate(uuid, ric_value="JPM"):
+def automate(uuid, ric_value):
     # Define MySQL connection parameters
     with open('./Configuration/database.config.json', 'r') as config_file:
         config = json.load(config_file)

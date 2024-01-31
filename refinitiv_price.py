@@ -12,11 +12,20 @@ def populate(uuid, ric):
     today = datetime.now().date()
     attempts = 0
 
+    flds = ["TRDPRC_1", "HIGH_1", "LOW_1", "ACVOL_UNS", "OPEN_PRC", "BID", "ASK"]
+
     while attempts < 30:
         yesterday = today - timedelta(days=1)
         print("Today's date:", today.strftime('%Y-%m-%d'))
         print("Yesterday's date:", yesterday.strftime('%Y-%m-%d'))
-        a = rd.get_history(universe=ric, start=yesterday, end=today)
+        try:
+            a = rd.get_history(universe=ric, fields=flds, interval='tas', count=1)
+            if a.isnull().values.any():
+                a = rd.get_history(universe=ric, fields=flds, start=yesterday, end=today, count=1)
+            else:
+                pass
+        except:
+            a = rd.get_history(universe=ric, fields=flds, start=yesterday, end=today, count=1)
         b = pd.DataFrame(a)
         if len(b) != 0:
             b.to_csv(f'./Output/{uuid}-refinitiv.csv', index=True)
