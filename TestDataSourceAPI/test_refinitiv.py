@@ -1,7 +1,8 @@
 import os
 import refinitiv.data as rd
 import pandas as pd
-import get_RIC
+from TestDataSourceAPI import get_RIC
+
 pd.set_option('display.max_columns', None)
 os.environ["RD_LIB_CONFIG_PATH"] = "./Configuration"
 rd.open_session()

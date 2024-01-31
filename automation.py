@@ -117,3 +117,17 @@ def automate(uuid, ric_value):
     else:
         print("One of the files is empty, missing, or does not contain data beyond the header.")
 
+    # 合并完成后，删除生成的临时CSV文件
+    if os.path.exists(temp_csv_path):
+        os.remove(temp_csv_path)
+        print(f"Temporary CSV file {temp_csv_path} has been deleted.")
+    else:
+        print(f"Temporary CSV file {temp_csv_path} does not exist.")
+
+    # 删除另一个生成的CSV文件
+    refinitiv_csv_path = f'./Output/{uuid}-refinitiv.csv'
+    if os.path.exists(refinitiv_csv_path):
+        os.remove(refinitiv_csv_path)
+        print(f"Refinitiv CSV file {refinitiv_csv_path} has been deleted.")
+    else:
+        print(f"Refinitiv CSV file {refinitiv_csv_path} does not exist.")

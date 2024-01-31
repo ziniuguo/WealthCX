@@ -1,14 +1,19 @@
 import os
 import uuid
 
+
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 
 import automation
 from LLM_integration import split_summary
+import asset_mp
+import asset_mp_refined
+import event_mp
+from apscheduler.schedulers.background import BackgroundScheduler
 
 app = FastAPI()
-
+scheduler = BackgroundScheduler()
 
 class FileResponseDeleteAfter(FileResponse):
     def __init__(self, path: str, *args, **kwargs):
@@ -19,6 +24,25 @@ class FileResponseDeleteAfter(FileResponse):
         await super().__call__(scope, receive, send)
         if os.path.exists(self.file_path):
             os.remove(self.file_path)
+
+
+def on_startup():
+    item_id = "JPM"  # 你可以指定要自动执行的参数
+    asset_mp.asset_mp()
+    event_mp.event_mp()
+    asset_mp_refined.asset_mp_refined()
+
+# 使用scheduler装饰器来设置定时任务，每天晚上3点执行on_startup函数
+@scheduler.scheduled_job("cron", hour=3)
+def scheduled_task():
+    on_startup()
+
+@app.on_event("startup")
+async def startup_event():
+    # 注册Startup事件
+    on_startup()
+    # 启动调度器
+    scheduler.start()
 
 
 @app.get("/")
