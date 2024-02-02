@@ -41,7 +41,7 @@ def scheduled_task():
 async def startup_event():
     # on_startup()
     scheduler.start()
-
+    pass
 
 @app.get("/")
 def read_root():
