@@ -3,6 +3,8 @@ from __future__ import annotations
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.llms import OpenAI
 import os
+from pathlib import Path
+from langchain.prompts import PromptTemplate
 
 # Create a list of documents (in this case, only one document)
 docs = ["At Apple's September event, the company unveiled the iPhone 15, which will be available in a range of colors "
@@ -12,21 +14,28 @@ docs = ["At Apple's September event, the company unveiled the iPhone 15, which w
         "from its predecessors and support USB-C charging. Apple's new products are also focused on environmental "
         "sustainability, with the Apple Watch Series 9 being the company's first carbon-neutral product through the "
         "use of clean electricity and recycled materials."]
+
+
 #
 
-os.environ["OPENAI_API_KEY"] = ""
-from langchain.prompts import PromptTemplate
+
+def access_setup():
+    data = Path('../Configuration/openai_key.txt').read_text()
+    os.environ["OPENAI_API_KEY"] = data
+
 
 def split_summary(news):
     # OpenAIEmbeddings(model="gpt-3.5-turbo-instruct")
+    access_setup()
     prompt_template = PromptTemplate(
         input_variables=["news"],
         template="please split the the following news into several bullet points: {news}. Besides, please indicate each bullet point by '-'.",
     )
-    prompt = prompt_template.format(news = docs[0])
+    if news == "":
+        prompt = prompt_template.format(news=docs[0])
+    else:
+        prompt = prompt_template.format(news=news)
 
     # llm = OpenAI(temperature = 0.9)
     llm = OpenAI(model_name="gpt-3.5-turbo-instruct")
     return llm(prompt)
-
-
