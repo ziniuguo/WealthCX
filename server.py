@@ -39,9 +39,7 @@ def scheduled_task():
 
 @app.on_event("startup")
 async def startup_event():
-    # 注册Startup事件
-    on_startup()
-    # 启动调度器
+    # on_startup()
     scheduler.start()
 
 

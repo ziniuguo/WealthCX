@@ -1,7 +1,6 @@
 import csv
 import json
 import os
-
 import mysql.connector
 import requests
 
