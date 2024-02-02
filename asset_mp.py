@@ -80,4 +80,4 @@ def asset_mp():
 
     print("CSV data successfully imported into the MySQL table.")
 
-asset_mp()
+# asset_mp()

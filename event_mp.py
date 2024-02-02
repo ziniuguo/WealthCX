@@ -78,4 +78,4 @@ def event_mp():
 
     print("CSV data successfully imported into the MySQL table.")
 
-event_mp()
+# event_mp()
