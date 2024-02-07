@@ -20,7 +20,7 @@ docs = ["At Apple's September event, the company unveiled the iPhone 15, which w
 
 
 def access_setup():
-    data = Path('../Configuration/openai_key.txt').read_text()
+    data = Path(os.path.join(os.path.dirname(__file__), '../Configuration/openai_key.txt')).read_text()
     os.environ["OPENAI_API_KEY"] = data
 
 

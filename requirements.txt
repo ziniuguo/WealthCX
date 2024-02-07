@@ -7,3 +7,4 @@ langchain~=0.0.331
 uvicorn==0.27.0
 refinitiv-data==1.5.0
 APScheduler==3.10.4
+openai
