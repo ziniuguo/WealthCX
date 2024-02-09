@@ -20,7 +20,7 @@ docs = ["At Apple's September event, the company unveiled the iPhone 15, which w
 
 
 def access_setup():
-    data = Path('../Configuration/openai_key.txt').read_text()
+    data = Path('./Configuration/openai_key.txt').read_text()
     os.environ["OPENAI_API_KEY"] = data
 
 
@@ -31,10 +31,10 @@ def split_summary(news):
         input_variables=["news"],
         template="please split the the following news into several bullet points: {news}. Besides, please indicate each bullet point by '-'.",
     )
-    if news == "":
-        prompt = prompt_template.format(news=docs[0])
-    else:
-        prompt = prompt_template.format(news=news)
+    # if news == "":
+    #     prompt = prompt_template.format(news=docs[0])
+    # else:
+    prompt = prompt_template.format(news=news)
 
     # llm = OpenAI(temperature = 0.9)
     llm = OpenAI(model_name="gpt-3.5-turbo-instruct")
