@@ -32,6 +32,6 @@ git pull
 
 # Restart uvicorn with pm2
 echo "Restarting Uvicorn with pm2..."
-pm2 restart uvicorn --name="fastapi-app" --watch main:app --log-date-format="YYYY-MM-DD HH:mm Z" --log "logs/fastapi-app.log" --log "logs/error.log"
+pm2 reload start_wealthcx.sh --name="fastapi-app" --watch server:app --log-date-format="YYYY-MM-DD HH:mm Z" --log "logs/fastapi-app.log" --log "logs/error.log"
 
 echo "Script execution completed."

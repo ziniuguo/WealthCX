@@ -1,6 +1,6 @@
 /.idea
 /venv
-/__pycache__
+**/__pycache__/
 
 /wealthcx
 /Output
@@ -9,3 +9,4 @@
 **.csv
 
 Configuration/openai_key.txt
+**.log
