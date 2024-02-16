@@ -42,16 +42,6 @@ def automate(uuid, ric_value):
     df = pd.read_sql(sql_query, conn)
 
     conn.close()
-    if 'Summary' in df.columns:
-        def process_summary(summary):
-            # 分割 Summary 字段
-            split_list = split_summary(summary).split('\n-')
-            # 如果列表的第一个元素是 "\n"，则去除它
-            if split_list and split_list[0] == "\n":
-                split_list.pop(0)
-            return json.dumps(split_list)
-
-        df['Summary'] = df['Summary'].apply(lambda x: process_summary(x) if x else x)
 
     df = df.drop(columns=['Idx'], errors='ignore')
 
@@ -95,6 +85,17 @@ def automate(uuid, ric_value):
     # This assumes that the JSON data and the original table are aligned by index.
     # If they are not, you will need to find a common key to merge on.
     merged_table = pd.concat([original_table, json_df], axis=1)
+
+    if 'Summary' in merged_table.columns:
+        def process_summary(summary):
+            # 分割 Summary 字段
+            split_list = split_summary(summary).split('\n-')
+            # 如果列表的第一个元素是 "\n"，则去除它
+            if split_list and split_list[0] == "\n":
+                split_list.pop(0)
+            return json.dumps(split_list)
+
+        merged_table['Summary'] = merged_table['Summary'].apply(lambda x: process_summary(x) if x else x)
 
     # Now export the merged table to a CSV file.
     temp_csv_path = f'./Output/{uuid}-temp.csv'

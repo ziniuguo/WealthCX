@@ -153,5 +153,3 @@ def event_mp():
     conn.close()
 
     print("CSV data successfully imported into the MySQL table.")
-
-# event_mp()

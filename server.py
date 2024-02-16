@@ -138,6 +138,26 @@ def format_timestamp(ts):
     formatted_date = date_obj.strftime(f"%b {day}{suffix} %Y")
 
     return formatted_date
+
+def format_timestamp_two(ts):
+    # 尝试将字符串转换为datetime对象，首先使用包含微秒的格式
+    try:
+        date_obj = datetime.datetime.strptime(ts, "%Y-%m-%d %H:%M:%S.%f")
+    except ValueError:
+        # 如果上述转换失败，尝试不包含微秒的格式
+        date_obj = datetime.datetime.strptime(ts, "%Y-%m-%d %H:%M:%S")
+
+    # 获取日并确定正确的后缀
+    day = date_obj.day
+    if 4 <= day <= 20 or 24 <= day <= 30:
+        suffix = "th"
+    else:
+        suffix = ["st", "nd", "rd"][day % 10 - 1]
+
+    # 使用strftime格式化月份和年份，手动处理日和后缀
+    formatted_date = date_obj.strftime(f"%b {day}{suffix} %Y")
+
+    return formatted_date
 @app.get("/query/inception/{item_id}")
 async def read_inception(item_id: str):
     unique_id = str(uuid.uuid1())
@@ -161,6 +181,30 @@ async def read_inception(item_id: str):
         if os.path.exists(file_path):
             os.remove(file_path)
     return JSONResponse(content={"Timestamp": formatted_timestamp})
+
+@app.get("/query/summarydate/{item_id}")
+async def read_inception(item_id: str):
+    unique_id = str(uuid.uuid1())
+    file_path = f"./Output/{unique_id}-output.csv"
+
+    try:
+        automation.automate(uuid=unique_id, ric_value=item_id)
+
+        if not os.path.exists(file_path):
+            raise HTTPException(status_code=404, detail="File not generated.")
+
+        df = pd.read_csv(file_path)
+        if "Date" not in df.columns:
+            raise HTTPException(status_code=404, detail="NewsDate not found in file.")
+
+        timestamp_value = df["Date"].iloc[0]
+        formatted_timestamp = format_timestamp_two(timestamp_value)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+    return JSONResponse(content={"Date": formatted_timestamp})
 
 @app.get("/query/summary/{item_id}")
 async def read_summary(item_id: str):
@@ -192,6 +236,8 @@ async def read_summary(item_id: str):
 
     # 以JSON格式返回Summary数据
     return JSONResponse(content={"Summary": summary_json})
+
+
 
 @app.get("/split/{item_id}")
 def split_sum(item_id:str):
