@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import time
+
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.llms import OpenAI
 import os
@@ -26,6 +28,7 @@ def access_setup():
 
 def split_summary(news):
     # OpenAIEmbeddings(model="gpt-3.5-turbo-instruct")
+    start_time = time.perf_counter()
     access_setup()
     prompt_template = PromptTemplate(
         input_variables=["news"],
@@ -38,4 +41,10 @@ def split_summary(news):
 
     # llm = OpenAI(temperature = 0.9)
     llm = OpenAI(model_name="gpt-3.5-turbo-instruct")
+    end_time = time.perf_counter()
+    execution_time = end_time - start_time
+    print(execution_time)
     return llm(prompt)
+
+
+split_summary("")
