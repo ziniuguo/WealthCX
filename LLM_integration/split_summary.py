@@ -44,7 +44,6 @@ def split_summary(news):
     end_time = time.perf_counter()
     execution_time = end_time - start_time
     print(execution_time)
+    with open("./execution_times.txt", 'a') as f:
+        f.write(f"{execution_time}\n")
     return llm(prompt)
-
-
-split_summary("")
