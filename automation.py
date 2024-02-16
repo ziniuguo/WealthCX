@@ -7,6 +7,9 @@ import pandas as pd
 import refinitiv_price
 import json
 
+from LLM_integration.split_summary import split_summary
+
+
 def check_file_existence(file_path):
     if not os.path.exists(file_path):
         print(f"Error: File not found at {file_path}")
@@ -32,7 +35,7 @@ def automate(uuid, ric_value):
     # Join event and asset
     sql_query = f"""
     SELECT * FROM asset_mp_refined 
-    INNER JOIN event_mp ON event_mp.assetCode = '{asset_code}' AND asset_mp_refined.assetCode = '{asset_code}' AND Sentiment != '' 
+    INNER JOIN event_mp ON event_mp.assetCode = '{asset_code}' AND asset_mp_refined.assetCode = '{asset_code}'
     ORDER BY event_mp.Date DESC LIMIT 1
     """
 
@@ -82,6 +85,17 @@ def automate(uuid, ric_value):
     # This assumes that the JSON data and the original table are aligned by index.
     # If they are not, you will need to find a common key to merge on.
     merged_table = pd.concat([original_table, json_df], axis=1)
+
+    if 'Summary' in merged_table.columns:
+        def process_summary(summary):
+            # 分割 Summary 字段
+            split_list = split_summary(summary).split('\n-')
+            # 如果列表的第一个元素是 "\n"，则去除它
+            if split_list and split_list[0] == "\n":
+                split_list.pop(0)
+            return json.dumps(split_list)
+
+        merged_table['Summary'] = merged_table['Summary'].apply(lambda x: process_summary(x) if x else x)
 
     # Now export the merged table to a CSV file.
     temp_csv_path = f'./Output/{uuid}-temp.csv'
