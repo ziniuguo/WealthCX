@@ -29,7 +29,7 @@ def split_summary(news):
     access_setup()
     prompt_template = PromptTemplate(
         input_variables=["news"],
-        template="please split the the following news into several bullet points: {news}. Besides, please indicate each bullet point by '-'.",
+        template="please split the the following news into several bullet points: {news}. Besides, please indicate each bullet point by '-'. Each points around 15-20 words",
     )
     if news == "":
         prompt = prompt_template.format(news=docs[0])
