@@ -1,7 +1,7 @@
 import spacy
 from fuzzywuzzy import process
 import re
-import datetime
+from datetime import datetime, timedelta
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -24,20 +24,31 @@ def find_closest_company(input_text, companies):
     else:
         return None
 
+def analyze_text(text):
+    doc = nlp(text)
+
+    date_pattern = r"\d{4}-\d{2}-\d{2}"
+    dates = re.findall(date_pattern, text)
+    today_date = datetime.strptime(dates[0], "%Y-%m-%d") if dates else datetime.today()
+    yesterday_date = today_date - timedelta(days=1)
+
+    if "yesterday's news" in text:
+        date_to_use = yesterday_date.strftime("%Y-%m-%d")
+    else:
+        date_to_use = today_date.strftime("%Y-%m-%d")
+
+    info = []
+
+    for ent in doc.ents:
+        if ent.label_ in ["ORG"]:
+            closest_company = find_closest_company(ent.text, company_to_ric)
+            if closest_company:
+                ric = company_to_ric[closest_company]
+                info.append({"ric": ric, "date": date_to_use})
+
+    return info
+
+# 示例文本
 text = "I want to read yesterday's news about JP Morgan. Today date is 2024-03-01"
-doc = nlp(text)
-
-date_pattern = r"\d{4}-\d{2}-\d{2}"
-dates = re.findall(date_pattern, text)
-date = dates[0] if dates else datetime.date.today().strftime("%Y-%m-%d")
-
-info = []
-
-for ent in doc.ents:
-    if ent.label_ in ["ORG"]:
-        closest_company = find_closest_company(ent.text, company_to_ric)
-        if closest_company:
-            ric = company_to_ric[closest_company]
-            info.append({"ric": ric, "date": date})
-
-print(info)
+result = analyze_text(text)
+print(result)
