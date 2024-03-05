@@ -3,7 +3,6 @@ from transformers import pipeline
 
 def text_classify(texts:list):
     classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
-
     candidate_labels = ["read company news", "financial term definition", "app usage"]
 
     for text in texts:
@@ -13,7 +12,6 @@ def text_classify(texts:list):
         prediction = labels[0]
         return_list = [False,False,False]
         return_list[candidate_labels.index(labels[0])] = True
-
     return return_list
 
 texts = [
