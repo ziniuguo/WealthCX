@@ -17,10 +17,6 @@ docs = ["At Apple's September event, the company unveiled the iPhone 15, which w
         "sustainability, with the Apple Watch Series 9 being the company's first carbon-neutral product through the "
         "use of clean electricity and recycled materials."]
 
-
-#
-
-
 def access_setup():
     data = Path(os.path.join(os.path.dirname(__file__), '../Configuration/openai_key.txt')).read_text()
     os.environ["OPENAI_API_KEY"] = data

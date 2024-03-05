@@ -3,19 +3,7 @@ from fuzzywuzzy import process
 import re
 from datetime import datetime, timedelta
 
-nlp = spacy.load("en_core_web_sm")
 
-company_to_ric = {
-    "J.P. Morgan Chase & Co": "JPM",
-    "Amazon.com Inc": "AMZN.O",
-    "Microsoft Corp": "MSFT.O",
-    "Alphabet Inc": "GOOGL.O",
-    "Tesla Inc": "TSLA.O",
-    "McDonald's Corp": "MCD",
-    "Meta Platforms Inc": "META.O",
-    "NVIDIA Corp": "NVDA.O",
-    "Netflix Inc": "NFLX.O",
-}
 
 def find_closest_company(input_text, companies):
     closest_match, score = process.extractOne(input_text, companies.keys())
@@ -25,6 +13,19 @@ def find_closest_company(input_text, companies):
         return None
 
 def analyze_text(text):
+    nlp = spacy.load("en_core_web_sm")
+
+    company_to_ric = {
+        "J.P. Morgan Chase & Co": "JPM",
+        "Amazon.com Inc": "AMZN.O",
+        "Microsoft Corp": "MSFT.O",
+        "Alphabet Inc": "GOOGL.O",
+        "Tesla Inc": "TSLA.O",
+        "McDonald's Corp": "MCD",
+        "Meta Platforms Inc": "META.O",
+        "NVIDIA Corp": "NVDA.O",
+        "Netflix Inc": "NFLX.O",
+    }
     doc = nlp(text)
 
     date_pattern = r"\d{4}-\d{2}-\d{2}"
@@ -45,10 +46,9 @@ def analyze_text(text):
             if closest_company:
                 ric = company_to_ric[closest_company]
                 info.append({"ric": ric, "date": date_to_use})
-
     return info
 
 # 示例文本
-text = "I want to read yesterday's news about JP Morgan. Today date is 2024-03-01"
+text = "I want to read today's news about JP Morgan. Today date is 2024-03-01"
 result = analyze_text(text)
 print(result)
