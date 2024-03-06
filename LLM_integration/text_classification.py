@@ -14,6 +14,8 @@ def text_classify(texts:list):
         return_list[candidate_labels.index(labels[0])] = True
     return return_list
 
+
+
 texts = [
     "I want to read today's news about JP Morgan. Today date is 2024-03-01",
     "I want to know the financial word 'BID' means",

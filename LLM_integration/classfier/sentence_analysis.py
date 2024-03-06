@@ -3,8 +3,6 @@ from fuzzywuzzy import process
 import re
 from datetime import datetime, timedelta
 
-
-
 def find_closest_company(input_text, companies):
     closest_match, score = process.extractOne(input_text, companies.keys())
     if score > 30:
