@@ -46,7 +46,7 @@ def analyze_text(text):
                 info.append({"ric": ric, "date": date_to_use})
     return info
 
-# 示例文本
-text = "I want to read today's news about JP Morgan. Today date is 2024-03-01"
-result = analyze_text(text)
-print(result)
+# # 示例文本
+# text = "I want to read today's news about JP Morgan. Today date is 2024-03-01"
+# result = analyze_text(text)
+# print(result)

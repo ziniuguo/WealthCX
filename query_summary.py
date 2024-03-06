@@ -33,6 +33,6 @@ def query_combined_table(ric):
         cursor.close()
         conn.close()
 
-ric_to_query = 'JPM'
-json_result = query_combined_table(ric_to_query)
-print(json_result)
+# ric_to_query = 'JPM'
+# json_result = query_combined_table(ric_to_query)
+# print(json_result)

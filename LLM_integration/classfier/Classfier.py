@@ -4,7 +4,7 @@ import class_terminology_explanation
 
 input = {'msg_class_num':1,'user_input':'I want to know the meaning of BID value'}
 
-def classfier(input:dict):
+def classifier(input:dict):
     if input.get("msg_class_num") == 0:
         pass
     elif input.get("msg_class_num") == 1:
@@ -15,5 +15,5 @@ def classfier(input:dict):
         output = class_terminology_explanation.class_terminology_explanation(input.get("user_input"))
     return output
 
-x = classfier(input)
-print(x)
+# x = classifier(input)
+# print(x)

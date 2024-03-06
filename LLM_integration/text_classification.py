@@ -16,10 +16,10 @@ def text_classify(texts:list):
 
 
 
-texts = [
-    "I want to read today's news about JP Morgan. Today date is 2024-03-01",
-    "I want to know the financial word 'BID' means",
-    "I want to know how to see JP Morgan's target price in the app"
-]
-x = text_classify([texts[2]])
-print(x)
+# texts = [
+#     "I want to read today's news about JP Morgan. Today date is 2024-03-01",
+#     "I want to know the financial word 'BID' means",
+#     "I want to know how to see JP Morgan's target price in the app"
+# ]
+# x = text_classify([texts[2]])
+# print(x)

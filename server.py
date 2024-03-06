@@ -3,7 +3,7 @@ import uuid
 import datetime
 import refinitiv.data as rd
 import pandas as pd
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
 from fastapi.responses import FileResponse
 from fastapi.responses import JSONResponse
 
@@ -16,6 +16,7 @@ import asset_merge
 from apscheduler.schedulers.background import BackgroundScheduler
 import json
 
+from LLM_integration.classfier.Classfier import classifier
 from TestDataSourceAPI.test_refinitiv import generate_and_save_chart
 import logging
 from datetime import datetime
@@ -279,4 +280,14 @@ async def read_current_price(item_id: str):
             os.remove(file_path)
     return JSONResponse(content={"BID": bid_value,"TRDPRC_1":trdprc_1_value,"Date": formatted_timestamp})
 
+@app.post("/chat_bot")
+async def chat_bot(request: Request):
+    try:
+        # Receive and parse JSON payload from the request body
+        body = await request.json()
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Invalid JSON")
+
+    output = classifier(body)
+    return output
 

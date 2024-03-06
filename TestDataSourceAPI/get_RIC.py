@@ -36,5 +36,5 @@ def get_ric():
     conn.close()
     return results
 
-
-get_ric()
+#
+# get_ric()

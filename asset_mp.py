@@ -9,15 +9,11 @@ def asset_mp():
     url = "https://dataapi.marketpsych.com/pulse/v4/equ/assets"
     apiKey = "cus_YGeqOlvG3ca8GL"
     outputFormat = "csv"
-
     response = requests.get(url, params={"apikey": apiKey, "format": outputFormat})
-
     if response.status_code == 200:
-        # 保存CSV数据到Output文件夹下的asset.csv
         output_folder = "./Output"
-        os.makedirs(output_folder, exist_ok=True)  # 确保Output文件夹存在
+        os.makedirs(output_folder, exist_ok=True)
         asset_file_path = os.path.join(output_folder, "asset.csv")
-
         with open(asset_file_path, "wb") as file:
             file.write(response.content)
         print("CSV file downloaded successfully.")
