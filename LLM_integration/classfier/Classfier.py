@@ -1,6 +1,6 @@
-import class_app_usage
-import class_news_analysis
-import class_terminology_explanation
+from . import class_app_usage
+from . import class_news_analysis
+from . import class_terminology_explanation
 
 input = {'msg_class_num':1,'user_input':'I want to know the meaning of BID value'}
 
