@@ -12,11 +12,17 @@ from LLM_integration import split_summary
 import asset_mp
 import asset_mp_refined
 import event_mp
+import asset_merge
 from apscheduler.schedulers.background import BackgroundScheduler
 import json
 
 from TestDataSourceAPI.test_refinitiv import generate_and_save_chart
+import logging
+from datetime import datetime
 
+# Configure logging
+logging.basicConfig(filename='scheduled_task.log', level=logging.INFO,
+                    format='%(asctime)s:%(levelname)s:%(message)s')
 app = FastAPI()
 scheduler = BackgroundScheduler()
 
@@ -36,11 +42,16 @@ def on_startup():
     asset_mp.asset_mp()
     event_mp.event_mp()
     asset_mp_refined.asset_mp_refined()
+    asset_merge.asset_merge()
 
 # 使用scheduler装饰器来设置定时任务，每天晚上3点执行on_startup函数
 @scheduler.scheduled_job("cron", hour=3)
 def scheduled_task():
-    on_startup()
+    try:
+        on_startup()
+        logging.info("Scheduled task executed successfully.")
+    except Exception as e:
+        logging.error(f"Scheduled task failed: {e}")
 
 @app.on_event("startup")
 async def startup_event():
