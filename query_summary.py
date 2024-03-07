@@ -24,8 +24,7 @@ def query_combined_table(ric):
 
     try:
         cursor.execute(query, (ric,))
-        results = cursor.fetchall()
-        return json.dumps(results, default=str)
+        return cursor.fetchall()
     except mysql.connector.Error as err:
         print("查询数据时出错: {}".format(err))
         return json.dumps({'error': str(err)})

@@ -13,6 +13,7 @@ def find_closest_company(input_text, companies):
 def analyze_text(text):
     nlp = spacy.load("en_core_web_sm")
 
+
     company_to_ric = {
         "J.P. Morgan Chase & Co": "JPM",
         "Amazon.com Inc": "AMZN.O",
@@ -47,6 +48,6 @@ def analyze_text(text):
     return info
 
 # # 示例文本
-# text = "I want to read today's news about JP Morgan. Today date is 2024-03-01"
+# text = "jp morgan"
 # result = analyze_text(text)
 # print(result)

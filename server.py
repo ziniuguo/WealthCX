@@ -16,7 +16,7 @@ import asset_merge
 from apscheduler.schedulers.background import BackgroundScheduler
 import json
 
-from LLM_integration.classfier.Classfier import classifier
+from LLM_integration.get_chat_response import get_chat_response
 from TestDataSourceAPI.test_refinitiv import generate_and_save_chart
 import logging
 from datetime import datetime
@@ -288,6 +288,6 @@ async def chat_bot(request: Request):
     except json.JSONDecodeError:
         raise HTTPException(status_code=400, detail="Invalid JSON")
 
-    output = classifier(body)
+    output = get_chat_response(body)
     return output
 

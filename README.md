@@ -9,3 +9,7 @@ git clone https://github.com/ziniuguo/WealthCX.git
 ```shell
 pip install requirements.txt
 ```
+* Specifically, the nlp model required in the project needs to be downloaded seperately:
+```shell
+python -m spacy download en
+```

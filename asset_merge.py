@@ -10,6 +10,7 @@ def asset_merge():
     conn = mysql.connector.connect(**config)
     cursor = conn.cursor()
 
+    drop_table_query = "drop table if exists combined_assets_events;"
     create_table_query = """
     CREATE TABLE combined_assets_events AS
     SELECT 
@@ -26,6 +27,7 @@ def asset_merge():
     """
 
     try:
+        cursor.execute(drop_table_query)
         cursor.execute(create_table_query)
         conn.commit()
         print("new table combined_assets_events create successful")

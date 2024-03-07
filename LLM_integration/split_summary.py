@@ -8,6 +8,8 @@ import os
 from pathlib import Path
 from langchain.prompts import PromptTemplate
 
+from LLM_integration import llm_client
+
 # Create a list of documents (in this case, only one document)
 docs = ["At Apple's September event, the company unveiled the iPhone 15, which will be available in a range of colors "
         "including pink, yellow, green, blue, and black. Additionally, Apple introduced the Apple Watch Series 9 and "
@@ -17,15 +19,9 @@ docs = ["At Apple's September event, the company unveiled the iPhone 15, which w
         "sustainability, with the Apple Watch Series 9 being the company's first carbon-neutral product through the "
         "use of clean electricity and recycled materials."]
 
-def access_setup():
-    data = Path(os.path.join(os.path.dirname(__file__), '../Configuration/openai_key.txt')).read_text()
-    os.environ["OPENAI_API_KEY"] = data
-
-
 def split_summary(news):
     # OpenAIEmbeddings(model="gpt-3.5-turbo-instruct")
     start_time = time.perf_counter()
-    access_setup()
     prompt_template = PromptTemplate(
         input_variables=["news"],
         template="please split the the following news into several bullet points: {news}. Besides, please indicate each bullet point by '-'. Each points around 15-20 words",
@@ -35,11 +31,9 @@ def split_summary(news):
     else:
         prompt = prompt_template.format(news=news)
 
-    # llm = OpenAI(temperature = 0.9)
-    llm = OpenAI(model_name="gpt-3.5-turbo-instruct")
     end_time = time.perf_counter()
     execution_time = end_time - start_time
     print(execution_time)
     with open("./execution_times.txt", 'a') as f:
         f.write(f"{execution_time}\n")
-    return llm(prompt)
+    return llm_client(prompt)

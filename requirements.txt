@@ -1,13 +1,17 @@
-tenacity==8.2.3
 fastapi~=0.109.0
 mysql-connector-python~=8.3.0
 requests~=2.28.1
 pandas~=2.0.2
-langchain~=0.0.331
+langchain
 uvicorn==0.27.0
-refinitiv-data==1.5.0
+refinitiv-data
 APScheduler==3.10.4
 matplotlib == 3.7.4
-openai
+openai==0.28
+pinecone-client==2.2.1
+python-dotenv==1.0.0
 spacy
 fuzzywuzzy
+transformers
+torch
+tenacity
