@@ -14,15 +14,20 @@ from LLM_integration import chat_model, sentence_analysis, llm_client
 def get_chat_response(input:dict):
     output = ""
     user_message = input["user_input"]
-    match input.get("msg_class_num"):
-        case 0:
-            output = get_general_chat_response(user_message)
-        case 1:
-            output = get_app_usage(user_message)
-        case 2:
-            output = get_news_analysis(user_message)
-        case 3:
-            output = get_terminology_explanation(user_message)
+    msg_class_num = input.get("msg_class_num")
+
+    if msg_class_num == 0:
+        output = get_general_chat_response(user_message)
+    elif msg_class_num == 1:
+        output = get_app_usage(user_message)
+    elif msg_class_num == 2:
+        output = get_news_analysis(user_message)
+    elif msg_class_num == 3:
+        output = get_terminology_explanation(user_message)
+    else:
+        # Handle other cases or provide a default value for output
+        output = "Unknown msg_class_num"
+
     return output
 
 def get_news_analysis(company_name:str):
