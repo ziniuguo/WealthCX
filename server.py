@@ -19,7 +19,7 @@ import json
 from LLM_integration.get_chat_response import get_chat_response
 from TestDataSourceAPI.test_refinitiv import generate_and_save_chart
 import logging
-from datetime import datetime
+
 
 # Configure logging
 logging.basicConfig(filename='scheduled_task.log', level=logging.INFO,
