@@ -9,4 +9,5 @@
 **.csv
 
 Configuration/openai_key.txt
+Configuration/database.config.json
 **.log
