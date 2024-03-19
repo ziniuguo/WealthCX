@@ -268,17 +268,21 @@ async def read_current_price(item_id: str):
         df = pd.read_csv(file_path)
         if "BID" not in df.columns:
             raise HTTPException(status_code=404, detail="BID not found in file.")
+        if "Summary" not in df.columns:
+            raise HTTPException(status_code=404, detail="Summary column not found in file.")
 
         bid_value = df["BID"].iloc[0]
         trdprc_1_value = df["TRDPRC_1"].iloc[0]
         inception = df["Timestamp"].iloc[0]
         formatted_timestamp = format_timestamp(inception)
+        summary_str = df["Summary"].iloc[0]
+        summary_json = json.loads(summary_str)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         if os.path.exists(file_path):
             os.remove(file_path)
-    return JSONResponse(content={"BID": bid_value,"TRDPRC_1":trdprc_1_value,"Date": formatted_timestamp})
+    return JSONResponse(content={"BID": bid_value,"TRDPRC_1":trdprc_1_value,"Date": formatted_timestamp,"Summary": summary_json})
 
 @app.post("/chat_bot")
 async def chat_bot(request: Request):
