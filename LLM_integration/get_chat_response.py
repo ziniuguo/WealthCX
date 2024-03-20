@@ -20,9 +20,9 @@ def get_chat_response(input:dict):
         output = get_general_chat_response(user_message)
     elif msg_class_num == 1:
         output = get_app_usage(user_message)
-    elif msg_class_num == 2:
-        output = get_news_analysis(user_message)
     elif msg_class_num == 3:
+        output = get_news_analysis(user_message)
+    elif msg_class_num == 2:
         output = get_terminology_explanation(user_message)
     else:
         # Handle other cases or provide a default value for output
