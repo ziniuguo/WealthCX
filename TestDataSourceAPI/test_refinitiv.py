@@ -1,3 +1,4 @@
+import json
 import os
 import refinitiv.data as rd
 import pandas as pd
@@ -38,3 +39,39 @@ def generate_and_save_chart(uuid, item_id):
     return chart_path
 
 # x = generate_and_save_chart(1,"JPM")
+def ref_market_signal(rics):
+    output_dir = "./Output"
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Initialize Refinitiv session
+    os.environ["RD_LIB_CONFIG_PATH"] = "../Configuration"
+    rd.open_session()
+
+    signals = []  # 用于存储每个RIC信号的列表
+    rics = json.loads(rics)
+    for item_id in rics.keys():
+        # 假设rd.get_history能够返回与item_id相关的股票历史数据
+        # 因为我们无法实际调用rd.get_history，所以这里用伪代码表示
+        stock_data = rd.get_history(universe=item_id)
+
+        # 将stock_data转换为DataFrame
+        df = pd.DataFrame(stock_data)
+
+        # 获取最后两个交易价格
+        last_two_prices = df["TRDPRC_1"][-2:].values
+
+        # 计算价格差异
+        price_difference = last_two_prices[1] - last_two_prices[0]
+
+        # 根据价格差异确定信号
+        signal = price_difference/last_two_prices[1]
+        signal = signal * 100
+        signal = round(signal, 2)
+
+
+        # 将信号添加到结果列表中
+        signals.append(signal)
+
+    return signals
+
+

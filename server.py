@@ -17,7 +17,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import json
 
 from LLM_integration.get_chat_response import get_chat_response
-from TestDataSourceAPI.test_refinitiv import generate_and_save_chart
+from TestDataSourceAPI.test_refinitiv import generate_and_save_chart,ref_market_signal
 import logging
 
 
@@ -310,3 +310,10 @@ async def chat_bot(request: Request):
     output = get_chat_response(body)
     return output
 
+@app.get("/signal/{item_id}")
+async def market_signal(item_id:str):
+    try:
+        signal_json = ref_market_signal(item_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    return signal_json
