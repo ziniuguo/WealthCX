@@ -311,9 +311,11 @@ async def chat_bot(request: Request):
     return output
 
 @app.post("/signal")
-async def market_signal(item_id:str):
+async def market_signal(request: Request):
     try:
-        signal_json = await ref_market_signal(item_id)
+        body = await request.json()
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    signal_json = ref_market_signal(body)
     return signal_json
