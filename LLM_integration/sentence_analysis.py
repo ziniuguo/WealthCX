@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 def find_closest_company(input_text, companies):
     closest_match, score = process.extractOne(input_text, companies.keys())
+    print(score)
     if score > 30:
         return closest_match
     else:
@@ -12,19 +13,16 @@ def find_closest_company(input_text, companies):
 
 def analyze_text(text):
     nlp = spacy.load("en_core_web_sm")
-
-
-    company_to_ric = {
-        "J.P. Morgan Chase & Co": "JPM",
-        "Amazon.com Inc": "AMZN.O",
-        "Microsoft Corp": "MSFT.O",
-        "Alphabet Inc": "GOOGL.O",
-        "Tesla Inc": "TSLA.O",
-        "McDonald's Corp": "MCD",
-        "Meta Platforms Inc": "META.O",
-        "NVIDIA Corp": "NVDA.O",
-        "Netflix Inc": "NFLX.O",
-    }
+    # nlp = spacy.load("en_core_web_lg")
+    company_to_ric = {'j.p. morgan chase & co': 'JPM',
+ 'amazon.com inc': 'AMZN.O',
+ 'microsoft corp': 'MSFT.O',
+ 'alphabet inc': 'GOOGL.O',
+ 'tesla inc': 'TSLA.O',
+ "mcdonald's corp": 'MCD',
+ 'meta platforms inc': 'META.O',
+ 'nvidia corp': 'NVDA.O',
+ 'netflix inc': 'NFLX.O'}
     doc = nlp(text)
 
     date_pattern = r"\d{4}-\d{2}-\d{2}"
@@ -36,11 +34,9 @@ def analyze_text(text):
         date_to_use = yesterday_date.strftime("%Y-%m-%d")
     else:
         date_to_use = today_date.strftime("%Y-%m-%d")
-
     info = []
-
     for ent in doc.ents:
-        if ent.label_ in ["ORG"]:
+        # if ent.label_ in ["ORG"]:
             closest_company = find_closest_company(ent.text, company_to_ric)
             if closest_company:
                 ric = company_to_ric[closest_company]
@@ -48,6 +44,6 @@ def analyze_text(text):
     return info
 
 # # 示例文本
-# text = "jp morgan"
-# result = analyze_text(text)
-# print(result)
+text = "jp morgan"
+result = analyze_text(text)
+print(result)

@@ -32,6 +32,14 @@ def get_chat_response(input:dict):
 
 def get_news_analysis(company_name:str):
     target_company_RIC = sentence_analysis.analyze_text(company_name)
+    if target_company_RIC == []:
+        output_json = {
+            "content": "Sorry I can not identify or there is no such company in my Database. Please provide more accurate Company name.",
+            "additional_kwargs": {},
+            "type": "ai",
+            "example": False
+        }
+        return output_json
     json_result = query_summary.query_combined_table(target_company_RIC[0]['ric'])
     template_string = """
         You are an expert investment consultant. 
