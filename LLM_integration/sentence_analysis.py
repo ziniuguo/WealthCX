@@ -44,6 +44,6 @@ def analyze_text(text):
     return info
 
 # # 示例文本
-text = "jp morgan"
-result = analyze_text(text)
-print(result)
+# text = "jp morgan"
+# result = analyze_text(text)
+# print(result)
