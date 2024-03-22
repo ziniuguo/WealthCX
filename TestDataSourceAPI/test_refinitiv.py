@@ -48,7 +48,8 @@ def ref_market_signal(rics):
     rd.open_session()
 
     signals = []  # 用于存储每个RIC信号的列表
-    rics = json.loads(rics)
+    if isinstance(rics, str):
+        rics = json.loads(rics)
     for item_id in rics.keys():
         # 假设rd.get_history能够返回与item_id相关的股票历史数据
         # 因为我们无法实际调用rd.get_history，所以这里用伪代码表示

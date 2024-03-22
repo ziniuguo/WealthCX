@@ -314,7 +314,6 @@ async def chat_bot(request: Request):
 async def market_signal(request: Request):
     try:
         body = await request.json()
-
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     signal_json = ref_market_signal(body)
