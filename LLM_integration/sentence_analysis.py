@@ -12,8 +12,8 @@ def find_closest_company(input_text, companies):
         return None
 
 def analyze_text(text):
-    nlp = spacy.load("en_core_web_sm")
-    # nlp = spacy.load("en_core_web_lg")
+    # nlp = spacy.load("en_core_web_sm")
+    nlp = spacy.load("en_core_web_lg")
     company_to_ric = {'j.p. morgan chase & co': 'JPM',
  'amazon.com inc': 'AMZN.O',
  'microsoft corp': 'MSFT.O',
