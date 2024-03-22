@@ -310,10 +310,10 @@ async def chat_bot(request: Request):
     output = get_chat_response(body)
     return output
 
-@app.get("/signal/{item_id}")
+@app.post("/signal")
 async def market_signal(item_id:str):
     try:
-        signal_json = ref_market_signal(item_id)
+        signal_json = await ref_market_signal(item_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     return signal_json
