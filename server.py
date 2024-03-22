@@ -147,7 +147,16 @@ async def read_current_price(item_id: str):
 
 
 def format_timestamp(ts):
-    date_obj = datetime.datetime.strptime(ts, "%Y-%m-%d %H:%M:%S.%f")
+    try:
+        # Try parsing the input string as a timestamp
+        date_obj = datetime.datetime.strptime(ts, "%Y-%m-%d %H:%M:%S.%f")
+    except ValueError:
+        try:
+            # If parsing as timestamp fails, try parsing as pure date
+            date_obj = datetime.datetime.strptime(ts, "%Y-%m-%d")
+        except ValueError:
+            # If both parsing attempts fail, return None
+            return None
 
     day = date_obj.day
     if 4 <= day <= 20 or 24 <= day <= 30:
@@ -186,10 +195,12 @@ async def read_inception(item_id: str):
             raise HTTPException(status_code=404, detail="File not generated.")
 
         df = pd.read_csv(file_path)
-        if "Timestamp" not in df.columns:
-            raise HTTPException(status_code=404, detail="Timestamp not found in file.")
 
-        timestamp_value = df["Timestamp"].iloc[0]
+        try:
+            timestamp_value = df["Timestamp"].iloc[0]
+        except KeyError as ke:
+            print("no timestamp found, using Date.1")
+            timestamp_value = df["Date.1"].iloc[0]
         formatted_timestamp = format_timestamp(timestamp_value)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -273,7 +284,11 @@ async def read_current_price(item_id: str):
 
         bid_value = df["BID"].iloc[0]
         trdprc_1_value = df["TRDPRC_1"].iloc[0]
-        inception = df["Timestamp"].iloc[0]
+        try:
+            inception = df["Timestamp"].iloc[0]
+        except KeyError as ke:
+            print("The df has no field timestamp. Use Date.1 instead")
+            inception = df["Date.1"].iloc[0]
         formatted_timestamp = format_timestamp(inception)
         summary_str = df["Summary"].iloc[0]
         summary_json = json.loads(summary_str)
